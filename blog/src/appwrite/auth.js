@@ -40,8 +40,9 @@ export class AuthService{
         try {
             return await this.account.get()
         } catch (error) {
-            throw error
+            console.log("Appwrite service :: getCurrentUser :: error", error);
         }
+        return null;
     }
     async logout(){
         try {
