@@ -33,11 +33,6 @@ const App = () => {
       </div>
     </div>
   ): null
-  return (
-    <div>
-      <h2>Appwrite URL: {import.meta.env.VITE_APPWRITE_URL}</h2>
-    </div>
-  )
 }
 
 export default App
