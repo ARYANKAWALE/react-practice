@@ -10,7 +10,7 @@ import Signup from './pages/Signup.jsx'
 import Login from './pages/Login.jsx'
 import AllPost from './pages/AllPost.jsx'
 import EditPost from './pages/EditPost.jsx'
-import AddPost from './pages/addPost.jsx'
+import AddPost from './pages/AddPost.jsx'
 import Home from './pages/Home.jsx'
 import Post from './pages/Post.jsx'
 
