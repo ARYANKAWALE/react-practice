@@ -4,9 +4,9 @@ import { Controller } from "react-hook-form";
 
 export default function RTE({ name, control, label, defaultValue = "" }) {
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       {label && (
-        <label className="inline-block mb-2 text-sm font-medium text-slate-300">
+        <label className="inline-block mb-2.5 text-sm font-medium text-slate-200 tracking-tight">
           {label}
         </label>
       )}
@@ -18,7 +18,7 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
             apiKey="82yts1imppclejdhy1knqxumbiemhodgmm312g16jh735llz"
             initialValue={defaultValue}
             init={{
-              height: 450,
+              height: 400,
               menubar: true,
               skin: "oxide-dark",
               content_css: "dark",

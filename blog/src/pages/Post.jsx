@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 export default function Post() {
   const [post, setPost] = useState(null);
+  const [coverLoadFailed, setCoverLoadFailed] = useState(false);
   const { slug } = useParams();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
@@ -21,6 +22,10 @@ export default function Post() {
     } else navigate("/");
   }, [slug, navigate]);
 
+  useEffect(() => {
+    setCoverLoadFailed(false);
+  }, [post?.$id, post?.featuredImage]);
+
   const deletePost = () => {
     appwriteService.deletePost(post.$id).then((status) => {
       if (status) {
@@ -30,17 +35,33 @@ export default function Post() {
     });
   };
 
+  const coverUrl = post
+    ? appwriteService.getFeaturedImageUrl(post.featuredImage)
+    : null;
+  const showCover = coverUrl && !coverLoadFailed;
+
   return post ? (
     <div className="py-6 sm:py-10 relative z-10 min-h-screen">
       <Container>
         <div className="animate-fade-in">
-          <div className="w-full mb-6 sm:mb-10 relative rounded-[10px] sm:rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-            <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
-              className="w-full h-48 sm:h-72 md:h-96 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent" />
+          <div className="w-full mb-6 sm:mb-10 relative rounded-[10px] sm:rounded-2xl overflow-hidden border border-white/5 shadow-2xl min-h-[12rem] sm:min-h-[18rem] bg-slate-800/80">
+            {showCover ? (
+              <img
+                src={coverUrl}
+                alt={post.title}
+                className="w-full h-48 sm:h-72 md:h-96 object-cover"
+                onError={() => setCoverLoadFailed(true)}
+                decoding="async"
+              />
+            ) : (
+              <div
+                className="w-full h-48 sm:h-72 md:h-96 flex items-center justify-center bg-gradient-to-br from-slate-800 to-[#ae7aff]/5"
+                aria-hidden
+              >
+                <span className="text-6xl sm:text-7xl opacity-30">📄</span>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent pointer-events-none" />
             {isAuthor && (
               <div className="absolute right-3 sm:right-5 top-3 sm:top-5 flex gap-2 sm:gap-3">
                 <Link to={`/edit-post/${post.$id}`}>

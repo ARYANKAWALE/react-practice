@@ -18,15 +18,15 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 h-20 flex justify-evenly items-center" style={{
+    <header className="sticky top-0 z-50 w-full border-b border-white/5 h-20 flex items-center" style={{
       background: 'rgba(15, 23, 42, 0.8)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
     }}>
       <Container>
-        <nav className="flex items-center justify-between py-3">
+        <nav className="flex w-full items-center justify-between gap-4 py-3 min-h-[3.25rem]">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group" onClick={() => setMobileOpen(false)}>
+          <Link to="/" className="flex shrink-0 items-center gap-2.5 group" onClick={() => setMobileOpen(false)}>
             <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-[#7c3aed] to-[#ae7aff] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#ae7aff]/20 group-hover:shadow-[#ae7aff]/40 transition-all duration-300 group-hover:scale-105">
               B
             </div>
@@ -35,14 +35,14 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Desktop nav */}
-          <ul className="hidden md:flex items-center gap-1 gap-10 text-20">
+          {/* Desktop nav — grouped so links stay together on the right */}
+          <ul className="hidden md:flex flex-wrap items-center justify-end gap-0.5 sm:gap-1">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>
                   <button
                     onClick={() => navigate(item.slug)}
-                    className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white rounded-[10px] hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                    className="px-3.5 py-2 text-sm font-medium text-slate-400 hover:text-white rounded-[10px] hover:bg-white/5 transition-all duration-200 cursor-pointer"
                   >
                     {item.name}
                   </button>

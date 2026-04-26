@@ -79,13 +79,19 @@ export default function PostForm({ post }) {
   }, [watch, slugTransform, setValue]);
 
   const imageRegister = register("image", { required: !post });
+  const currentCoverUrl = post
+    ? appwriteService.getFeaturedImageUrl(post.featuredImage)
+    : null;
 
   return (
-    // <div className="flex justify-center items-center pt-10">
-      <form onSubmit={handleSubmit(submit)} className="animate-fade-in">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 lg:gap-8 items-start">
-          {/* ===== Left Column — Editor ===== */}
-          <div className="space-y-5 min-w-0">
+    <div className="pb-12 sm:pb-16">
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="animate-fade-in w-full max-w-6xl mx-auto"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_min(100%,20rem)] xl:grid-cols-[minmax(0,1fr)_22rem] gap-8 lg:gap-10 items-start">
+          {/* ===== Main column — show second on small screens (settings go first) ===== */}
+          <div className="order-2 lg:order-1 space-y-7 sm:space-y-8 min-w-0">
             <Input
               label="Title"
               placeholder="Enter your post title..."
@@ -109,24 +115,24 @@ export default function PostForm({ post }) {
             />
           </div>
 
-          {/* ===== Right Column — Sticky Sidebar ===== */}
-          <div className="lg:sticky lg:top-20">
-            <div className="glass-sidebar p-5 sm:p-6 space-y-6 p-10">
+          {/* ===== Sidebar — first on mobile so publish is reachable without scrolling past the editor ===== */}
+          <div className="order-1 lg:order-2 w-full min-w-0 lg:max-w-none self-start lg:sticky lg:top-[5.5rem]">
+            <div className="glass-sidebar p-6 sm:p-7 space-y-6 sm:space-y-7 shadow-[0_4px_40px_-12px_rgba(0,0,0,0.35)]">
               {/* Header */}
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#ae7aff] pulse-dot"></div>
-                <h3 className="text-base font-semibold text-white tracking-tight">
+              <div className="flex items-center gap-2.5 pb-1 border-b border-white/5 -mx-1 px-1">
+                <div className="w-2 h-2 rounded-full bg-[#ae7aff] pulse-dot shrink-0" aria-hidden />
+                <h3 className="text-base font-semibold text-slate-100 tracking-tight">
                   Post Settings
                 </h3>
               </div>
 
               {/* Dropzone */}
               <div>
-                <label className="inline-block mb-2 text-sm font-medium text-slate-300">
+                <label className="inline-block mb-2.5 text-sm font-medium text-slate-200">
                   Featured Image
                 </label>
                 <div
-                  className={`dropzone ${fileName ? "has-file" : ""} ${dragActive ? "border-[#ae7aff] bg-[#ae7aff]/5" : ""}`}
+                  className={`dropzone p-6 sm:p-7 sm:px-8 ${fileName ? "has-file" : ""} ${dragActive ? "border-[#ae7aff] bg-[#ae7aff]/5" : ""}`}
                   onDragEnter={() => setDragActive(true)}
                   onDragLeave={() => setDragActive(false)}
                   onDrop={() => setDragActive(false)}
@@ -181,12 +187,13 @@ export default function PostForm({ post }) {
               </div>
 
               {/* Current image preview (edit mode) */}
-              {post && (
+              {post && currentCoverUrl && (
                 <div className="rounded-[10px] overflow-hidden border border-slate-700/50">
                   <img
-                    src={appwriteService.getFilePreview(post.featuredImage)}
+                    src={currentCoverUrl}
                     alt={post.title}
                     className="w-full h-36 object-cover"
+                    loading="lazy"
                   />
                   <div className="px-3 py-2 bg-slate-800/50">
                     <p className="text-xs text-slate-500">Current image</p>
@@ -202,16 +209,18 @@ export default function PostForm({ post }) {
               />
 
               {/* Divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-slate-600/30 to-transparent"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-slate-600/30 to-transparent" />
 
-              {/* Submit */}
-              <Button type="submit" className="w-full">
-                {post ? "✨ Update Post" : "🚀 Publish Post"}
-              </Button>
+              {/* Submit — extra padding so the button is not flush with the card edge */}
+              <div className="pt-1 pb-0.5">
+                <Button type="submit" className="w-full min-h-12 text-[15px]">
+                  {post ? "✨ Update Post" : "🚀 Publish Post"}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </form>
-    // </div>
+    </div>
   );
 }

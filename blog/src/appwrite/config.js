@@ -1,5 +1,5 @@
 import conf from '../conf/conf.js'
-import { Client, ID, Databases, Storage, Query } from 'appwrite'
+import { Client, ID, Databases, Storage, Query, Permission, Role } from 'appwrite'
 
 export class ConfigService{
     client = new Client();
@@ -90,13 +90,14 @@ export class ConfigService{
         }
     }
 
-    // file upload service
+    // file upload service — public read so featured images work in <img> for all visitors
     async uploadFile(file){
         try {
             return await this.bucket.createFile(
                 conf.appwriteBucketId,
                 ID.unique(),
-                file
+                file,
+                [Permission.read(Role.any())]
             )
         } catch (error) {
             console.log("Appwrite service :: uploadFile :: error", error)
@@ -117,14 +118,35 @@ export class ConfigService{
         }
     }
 
-    getFilePreview(fileId){
-        return this.bucket.getFilePreview(
-            conf.appwriteBucketId,
-            fileId
-        )
+    /**
+     * Thumbnail / transformed image (Appwrite has limits, e.g. very large source files on preview).
+     */
+    getFilePreview(fileId) {
+        if (fileId == null || fileId === '') {
+            return null
+        }
+        return this.bucket.getFilePreview({
+            bucketId: conf.appwriteBucketId,
+            fileId,
+        })
+    }
+
+    /**
+     * URL for <img src> cover images — uses the /view endpoint (original file) instead of /preview.
+     * Preview can return errors for some files; view matches what users expect for featured photos.
+     * Requires read permission (see uploadFile: Permission.read(Role.any())).
+     */
+    getFeaturedImageUrl(fileId) {
+        if (fileId == null || fileId === '') {
+            return null
+        }
+        return this.bucket.getFileView({
+            bucketId: conf.appwriteBucketId,
+            fileId,
+        })
     }
 }
 
 const appwriteService = new ConfigService();
 export default appwriteService;
-
+
