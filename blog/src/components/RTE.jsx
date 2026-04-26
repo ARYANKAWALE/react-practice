@@ -5,24 +5,29 @@ import { Controller } from "react-hook-form";
 export default function RTE({ name, control, label, defaultValue = "" }) {
   return (
     <div className="w-full">
-      {label && <label className="inline-block mb-1 pl-1 ">{label}</label>}
+      {label && (
+        <label className="inline-block mb-2 text-sm font-medium text-slate-300">
+          {label}
+        </label>
+      )}
       <Controller
         name={name || "content"}
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
+            apiKey="82yts1imppclejdhy1knqxumbiemhodgmm312g16jh735llz"
             initialValue={defaultValue}
             init={{
-              initialValue: defaultValue,
-              height: 500,
+              height: 450,
               menubar: true,
+              skin: "oxide-dark",
+              content_css: "dark",
               plugins: [
                 "image",
                 "advlist",
                 "autolink",
                 "lists",
                 "link",
-                "image",
                 "charmap",
                 "preview",
                 "anchor",
@@ -33,14 +38,24 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
                 "insertdatetime",
                 "media",
                 "table",
-                "code",
                 "help",
                 "wordcount",
-                "anchor",
               ],
               toolbar:
-                "undo redo | blocks | image | bold italic forecolor | alignleft aligncenter bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
-                content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
+                "undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image media | removeformat | help",
+              content_style: `
+                body { 
+                  font-family: 'Inter', Helvetica, Arial, sans-serif; 
+                  font-size: 15px; 
+                  color: #e2e8f0; 
+                  background: #0f172a;
+                  line-height: 1.7;
+                  padding: 8px;
+                }
+                a { color: #ae7aff; }
+                h1, h2, h3 { color: #f1f5f9; }
+              `,
+              placeholder: "Start writing your story...",
             }}
             onEditorChange={onChange}
           />

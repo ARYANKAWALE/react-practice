@@ -7,7 +7,6 @@ import {login,logout} from "./store/authSlice"
 import { Footer, Header } from './components'
 
 const App = () => {
-  // console.log(import.meta.env.VITE_APPWRITE_URL)
   const [loading,setLoading] = useState(true)
   const dispatch = useDispatch()
 
@@ -22,17 +21,23 @@ const App = () => {
     })
     .finally(()=>setLoading(false))
   },[])
+
   return !loading ? (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
-      <div className='w-full block'>
-          <Header/>
-          <main>
-            <Outlet/>
-          </main>
-          <Footer/>
+    <div className='blog-bg min-h-screen flex flex-col'>
+      <Header/>
+      <main className='flex-grow relative z-10'>
+        <Outlet/>
+      </main>
+      <Footer/>
+    </div>
+  ) : (
+    <div className="blog-bg min-h-screen flex items-center justify-center">
+      <div className="text-center animate-fade-in">
+        <div className="w-12 h-12 border-4 border-[#ae7aff]/30 border-t-[#ae7aff] rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-slate-500 text-sm">Loading...</p>
       </div>
     </div>
-  ): null
+  )
 }
 
 export default App
