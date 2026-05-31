@@ -11,7 +11,7 @@ function App() {
   return (
     <ThemeContext.Provider value={[theme, setTheme]}>
       <div id="Container" 
-      style={{backgroundColor:theme==='light'?'beige':'black',\
+      style={{backgroundColor:theme==='light'?'beige':'black',
         color:theme==='light'?'black':'white'}}>
       <CardA/>
       </div>
